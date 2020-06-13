@@ -1,5 +1,9 @@
 'use strict';
 
+let attempt = 10;
+let rand = Math.floor(Math.random() * 100) + 1;
+
+
 const isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
@@ -7,37 +11,39 @@ const isNumber = function (n) {
 function bot(number, attempts) {
 
   alert('Загадывание случайного числа от 1 до 100');
+
   
   return function game() {
-
 
     // Прошу пользователя угадать число от 1 до 100
     const userNum = prompt('Угадай число от 1 до 100');
     
     if (!isNumber(userNum) || userNum.trim() === '') {
       const ans = confirm('Введи число!');
-      gameRull(ans);
+      replay(ans);
     } else if (userNum > number) {
       if (attempts > 0) {
         const ans = confirm('Загаданное число меньше, осталось попыток ' + --attempts);
-        gameRull(ans);
+        replay(ans);
       } else {
-        let again = confirm('Попытки закончились, хотите сыграть еще?');
+        const again = confirm('Попытки закончились, хотите сыграть еще?');
         gameReset(again);
       }
     } else if (userNum < number) {
       if (attempts > 0) {
         const ans = confirm('Загаданное число больше, осталось попыток ' + --attempts);
-        gameRull(ans);
+        replay(ans);
       } else {
-        let again = confirm('Попытки закончились, хотите сыграть еще?');
+        const again = confirm('Попытки закончились, хотите сыграть еще?');
         gameReset(again);
       }
+    } else {
+      const win = confirm('Поздравляю, Вы угадали!!! Хотели бы сыграть еще?');
+      gameAgain(win);
     }
 
-    function gameRull(ans) {
+    function replay(ans) {
       if (ans) {
-        
         game();
       }
     }
@@ -47,13 +53,17 @@ function bot(number, attempts) {
         game();
       }
     }
+    function gameAgain(ans) {
+      if (ans) {
+        attempts = 10;
+        number = Math.floor(Math.random() * 100) + 1;
+        game();
+      }
+    }
   }
 }
 
-const answer = 10;
-let attempts = 10;
-
-answer >= 0 && answer <= 100 ? bot(answer, attempts)() : console.log('Загадайте число от 1 до 100!');
+bot(rand, attempt)();
 
 
 
